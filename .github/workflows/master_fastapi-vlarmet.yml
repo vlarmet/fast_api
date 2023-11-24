@@ -58,8 +58,8 @@ jobs:
       - name: Unzip artifact for deployment
         run: |
           unzip release.zip
-          apt-get -y install curl
-          apt-get install libgomp1
+          sudo apt-get -y install curl
+          sudo apt-get install libgomp1
 
 
       - name: 'Deploy to Azure Web App'
