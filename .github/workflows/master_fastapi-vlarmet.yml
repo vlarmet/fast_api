@@ -56,7 +56,10 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: |
+          unzip release.zip
+          apt-get -y install curl
+          apt-get install libgomp1
 
 
       - name: 'Deploy to Azure Web App'
