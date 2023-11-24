@@ -2,3 +2,5 @@ fastapi==0.70.0
 uvicorn==0.14.0
 joblib==1.3.2
 pandas
+imbalanced-learn
+lightgbm==4.1.0
