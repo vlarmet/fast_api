@@ -2,6 +2,8 @@ from fastapi import FastAPI, Body, HTTPException, Depends
 from typing import Optional
 import pandas as pd
 import joblib
+import json
+import uvicorn
 
 app = FastAPI()
 
@@ -16,7 +18,7 @@ def read_root():
     return {"Bonjour": "monde cruel"}
 
 @app.get('/prediction/')
-def get_prediction(json_client: dict = Body({}), model: Optional[object] = Depends(load_model)):
+def get_prediction(json_client: dict):
     """
     Calculates the probability of default for a client.  
     Args:  
@@ -24,9 +26,11 @@ def get_prediction(json_client: dict = Body({}), model: Optional[object] = Depen
     Returns:    
     - probability of default (dict).
     """
+
     try:
         df_one_client = pd.Series(json_client).to_frame().transpose()
-        probability = model[1].predict_proba(df_one_client)[:, 1][0]
+        probability = pipeline.predict_proba(df_one_client)[:, 1][0]
         return {'probability': probability}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+    
