@@ -58,16 +58,11 @@ jobs:
       - name: Unzip artifact for deployment
         run: |
           unzip release.zip
-          sudo apt-get -y install curl
-          sudo apt-get install libgomp1
 
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
-        run: |
-          sudo apt-get -y install curl
-          sudo apt-get install libgomp1
         with:
           app-name: 'fastapi-vlarmet'
           slot-name: 'Production'
