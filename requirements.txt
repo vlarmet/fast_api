@@ -5,3 +5,4 @@ pandas
 imbalanced-learn
 lightgbm==4.1.0
 pytest
+requests
