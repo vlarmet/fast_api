@@ -31,10 +31,24 @@ jobs:
         run: pip install -r requirements.txt
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-      - name: Tests
+      - name: API functions test
         run: |
           pytest tests/test.py
 
+      - name: API test - launch localhost API
+        run: |
+          uvicorn main:app --reload --port 8000 &
+
+      - name: Wait for app to start
+        run: sleep 10
+
+      - name: API test - route test
+        run: |
+          pytest tests/test_api_get.py
+
+      - name: API test - kill API
+        run: |
+          pkill uvicorn
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r

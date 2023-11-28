@@ -7,6 +7,8 @@ import uvicorn
 
 app = FastAPI()
 
+test = pd.read_csv('data/test_samp.csv')
+
 def load_model():
     model_path = "model.joblib"
     return joblib.load(open(model_path, "rb"))
@@ -29,6 +31,24 @@ def get_prediction(json_client: dict):
 
     try:
         df_one_client = pd.Series(json_client).to_frame().transpose()
+        probability = pipeline.predict_proba(df_one_client)[:, 1][0]
+        return {'probability': probability}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+    
+@app.get('/prediction2/')
+def get_prediction2(client_index: dict):
+    """
+    Calculates the probability of default for a client.  
+    Args:  
+    - client data (json).  
+    Returns:    
+    - probability of default (dict).
+    """
+
+    try:
+        
+        df_one_client = test.iloc[int(client_index["index"]),1:].to_frame().transpose()
         probability = pipeline.predict_proba(df_one_client)[:, 1][0]
         return {'probability': probability}
     except Exception as e:
